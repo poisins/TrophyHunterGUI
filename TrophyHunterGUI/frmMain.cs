@@ -211,6 +211,7 @@ namespace TrophyHunterGUI
                     return;
                 }
                 lstLog.Items.Add(msg);
+                lstLog.TopIndex = lstLog.Items.Count - 1;
             }
             catch { }
         }
