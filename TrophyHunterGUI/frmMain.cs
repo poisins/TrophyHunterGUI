@@ -89,6 +89,31 @@ namespace TrophyHunterGUI
                 DisconnectFromDB();
             }
         }
+
+        private int GetRecordsCount()
+        {
+            int records = 0;
+            try
+            {
+                ConnectToDB();
+                string sqlQuery = "SELECT COUNT(*) FROM friends";
+                SQLiteCommand command = new SQLiteCommand(sqlQuery, dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    records = reader.GetInt32(0);
+                }
+            }
+            catch (Exception e)
+            {
+                LogMessage(string.Format("Error retrieving records count: " + e.ToString()));
+            }
+            finally
+            {
+                DisconnectFromDB();
+            }
+            return records;
+        }
         #endregion
 
         public frmMain()
@@ -123,7 +148,7 @@ namespace TrophyHunterGUI
 
             barProgress.Maximum = 2;
             //ChangeProcessState(true);
-            bWorkerRead.RunWorkerAsync();            
+            bWorkerRead.RunWorkerAsync();
         }
 
         private void btnStartHunting_Click(object sender, EventArgs e)
@@ -189,57 +214,6 @@ namespace TrophyHunterGUI
         #endregion
 
         #region Process profiles
-        //private void FetchMutualFriends()
-        //{
-        //    driver.Url = profileListUrl;
-
-        //    DateTime start = DateTime.Now;
-        //    bool hasMore = false;
-        //    do
-        //    {
-        //        IWebElement moreButton = null;
-        //        try
-        //        {
-        //            moreButton = driver.FindElement(By.XPath("//button[.='Vairāk']"));
-        //        }
-        //        catch { }
-
-        //        if (moreButton != null)
-        //        {
-        //            try
-        //            {
-        //                moreButton.Click();
-        //            }
-        //            catch { }
-
-        //            hasMore = true;
-        //        }
-        //        else
-        //        {
-        //            hasMore = false;
-        //        }
-
-        //    } while (hasMore);
-
-        //    IReadOnlyCollection<IWebElement> friendList = driver.FindElements(By.ClassName("userPicture"));
-
-        //    if (friendList.Count > 0)
-        //    {
-        //        ClearOldDB();
-        //    }
-
-        //    DateTime end = DateTime.Now;
-        //    TimeSpan time = end - start;
-        //    LogMessage(string.Format("Mutual friends list fetched in {0}h {1}m {2}s {3}ms", time.Hours, time.Minutes, time.Seconds, time.Milliseconds));
-        //    LogMessage(string.Format("Friend count found: " + friendList.Count));
-
-        //    start = DateTime.Now;
-        //    FetchProfileIDs(friendList);
-        //    end = DateTime.Now;
-        //    time = end - start;
-        //    LogMessage(string.Format("Database records saved in {0}h {1}m {2}s {3}ms", time.Hours, time.Minutes, time.Seconds, time.Milliseconds));
-        //}
-
         private void FetchProfileIDs(IReadOnlyCollection<IWebElement> elementList)
         {
             // Optimized database insert using transaction
@@ -256,11 +230,13 @@ namespace TrophyHunterGUI
 
                     for (int i = 0; i < elementList.Count; i++)
                     {
+                        lblSaveProgress.Text = string.Format("{0}/{1}", (i + 1), elementList.Count);
                         IWebElement elem = elementList.ElementAt<IWebElement>(i);
                         IWebElement imgElem = elem.FindElement(By.XPath(".//img"));
 
                         string profileID = GetProfileID(imgElem.GetAttribute("src"));
-                        if (profileID != string.Empty)
+                        //if (profileID != string.Empty)
+                        if (profileID.Length >= 2)
                         {
                             myparam.Value = profileID;
                             mycommand.ExecuteNonQuery();
@@ -362,7 +338,7 @@ namespace TrophyHunterGUI
             DateTime end = DateTime.Now;
             TimeSpan time = end - start;
             LogMessage(string.Format("Mutual friends list fetched in {0}h {1}m {2}s {3}ms", time.Hours, time.Minutes, time.Seconds, time.Milliseconds));
-            LogMessage(string.Format("Friend count found: " + friendList.Count));
+            LogMessage(string.Format("Possible count: " + friendList.Count));
             bWorkerRead.ReportProgress(1);
 
             start = DateTime.Now;
@@ -370,7 +346,11 @@ namespace TrophyHunterGUI
             end = DateTime.Now;
             time = end - start;
             LogMessage(string.Format("Database records saved in {0}h {1}m {2}s {3}ms", time.Hours, time.Minutes, time.Seconds, time.Milliseconds));
+            LogMessage(string.Format("Records successfully saved: {0}", GetRecordsCount()));
             bWorkerRead.ReportProgress(2);
+
+            barCaptchaNotify.BalloonTipText = "Profile list captured!";
+            barCaptchaNotify.ShowBalloonTip(100);
         }
 
         private void bWorkerRead_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -388,6 +368,7 @@ namespace TrophyHunterGUI
                         break;
                     case 2:
                         lblProgress.Text = "List fetched!";
+                        lblSaveProgress.Text = string.Empty;
                         break;
                     default:
                         lblProgress.Text = string.Format("{0}/{1}", e.ProgressPercentage, 2);
@@ -457,6 +438,7 @@ namespace TrophyHunterGUI
                 if (captchaElement != null)
                 {
                     captcha = true;
+                    barCaptchaNotify.BalloonTipText = "Captcha found! Waiting for input";
                     barCaptchaNotify.ShowBalloonTip(500);
                     LogMessage("Captcha found! Waiting for input");
                     Thread.Sleep(2000);
@@ -533,6 +515,7 @@ namespace TrophyHunterGUI
         }
         #endregion
 
+        #region Other
         private void btnReopenChrome_Click(object sender, EventArgs e)
         {
             if (driver == null)
@@ -551,5 +534,6 @@ namespace TrophyHunterGUI
             }
             catch { }
         }
+        #endregion
     }
 }

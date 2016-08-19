@@ -44,6 +44,7 @@
             this.btnReopenChrome = new System.Windows.Forms.Button();
             this.numContinueFrom = new System.Windows.Forms.NumericUpDown();
             this.barCaptchaNotify = new System.Windows.Forms.NotifyIcon(this.components);
+            this.lblSaveProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.barStatus.SuspendLayout();
             this.grpFriendList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numContinueFrom)).BeginInit();
@@ -84,7 +85,8 @@
             // 
             this.barStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.barProgress,
-            this.lblProgress});
+            this.lblProgress,
+            this.lblSaveProgress});
             this.barStatus.Location = new System.Drawing.Point(0, 219);
             this.barStatus.Name = "barStatus";
             this.barStatus.Size = new System.Drawing.Size(434, 22);
@@ -194,6 +196,11 @@
             this.barCaptchaNotify.Text = "Trophy Hunter";
             this.barCaptchaNotify.Visible = true;
             // 
+            // lblSaveProgress
+            // 
+            this.lblSaveProgress.Name = "lblSaveProgress";
+            this.lblSaveProgress.Size = new System.Drawing.Size(0, 17);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -240,6 +247,7 @@
         private System.Windows.Forms.Button btnReopenChrome;
         private System.Windows.Forms.NumericUpDown numContinueFrom;
         private System.Windows.Forms.NotifyIcon barCaptchaNotify;
+        private System.Windows.Forms.ToolStripStatusLabel lblSaveProgress;
 
     }
 }
