@@ -164,6 +164,7 @@ namespace TrophyHunterGUI
 
             barProgress.Maximum = friendsList.Count;
 
+            lblState.Text = "Hunting...";
             bWorkerHunt.RunWorkerAsync();
         }
 
@@ -230,7 +231,7 @@ namespace TrophyHunterGUI
 
                     for (int i = 0; i < elementList.Count; i++)
                     {
-                        lblSaveProgress.Text = string.Format("{0}/{1}", (i + 1), elementList.Count);
+                        lblProgress.Text = string.Format("{0}/{1}", (i + 1), elementList.Count);
                         IWebElement elem = elementList.ElementAt<IWebElement>(i);
                         IWebElement imgElem = elem.FindElement(By.XPath(".//img"));
 
@@ -361,17 +362,17 @@ namespace TrophyHunterGUI
                 switch (e.ProgressPercentage)
                 {
                     case 0:
-                        lblProgress.Text = "Fetching user list";
+                        lblState.Text = "Fetching user list";
                         break;
                     case 1:
-                        lblProgress.Text = "Saving user list";
+                        lblState.Text = "Saving user list";
                         break;
                     case 2:
-                        lblProgress.Text = "List fetched!";
-                        lblSaveProgress.Text = string.Empty;
+                        lblState.Text = "List fetched!";
+                        lblProgress.Text = string.Empty;
                         break;
                     default:
-                        lblProgress.Text = string.Format("{0}/{1}", e.ProgressPercentage, 2);
+                        lblState.Text = string.Format("{0}/{1}", e.ProgressPercentage, 2);
                         break;
                 }
             }
@@ -383,12 +384,16 @@ namespace TrophyHunterGUI
             if ((e.Cancelled == true))
             {
                 LogMessage("Worker Cancelled!");
+                lblState.Text = "Done!";
+                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
             else if (!(e.Error == null))
             {
                 LogMessage("Worker Error: " + e.Error.Message);
+                lblState.Text = "Error!";
+                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
@@ -397,6 +402,8 @@ namespace TrophyHunterGUI
                 if (bWorkerRead.CancellationPending)
                 {
                     LogMessage("Worker Cancelled!");
+                    lblState.Text = "Done!";
+                    lblProgress.Text = string.Empty;
                     //ChangeProcessState(false);
                     return;
                 }

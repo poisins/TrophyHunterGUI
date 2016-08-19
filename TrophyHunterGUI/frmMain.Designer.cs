@@ -34,6 +34,7 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.barStatus = new System.Windows.Forms.StatusStrip();
             this.barProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.lblState = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.grpFriendList = new System.Windows.Forms.GroupBox();
@@ -44,7 +45,6 @@
             this.btnReopenChrome = new System.Windows.Forms.Button();
             this.numContinueFrom = new System.Windows.Forms.NumericUpDown();
             this.barCaptchaNotify = new System.Windows.Forms.NotifyIcon(this.components);
-            this.lblSaveProgress = new System.Windows.Forms.ToolStripStatusLabel();
             this.barStatus.SuspendLayout();
             this.grpFriendList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numContinueFrom)).BeginInit();
@@ -85,8 +85,8 @@
             // 
             this.barStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.barProgress,
-            this.lblProgress,
-            this.lblSaveProgress});
+            this.lblState,
+            this.lblProgress});
             this.barStatus.Location = new System.Drawing.Point(0, 219);
             this.barStatus.Name = "barStatus";
             this.barStatus.Size = new System.Drawing.Size(434, 22);
@@ -99,6 +99,11 @@
             this.barProgress.Size = new System.Drawing.Size(100, 16);
             this.barProgress.Step = 1;
             this.barProgress.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            // 
+            // lblState
+            // 
+            this.lblState.Name = "lblState";
+            this.lblState.Size = new System.Drawing.Size(0, 17);
             // 
             // lblProgress
             // 
@@ -196,11 +201,6 @@
             this.barCaptchaNotify.Text = "Trophy Hunter";
             this.barCaptchaNotify.Visible = true;
             // 
-            // lblSaveProgress
-            // 
-            this.lblSaveProgress.Name = "lblSaveProgress";
-            this.lblSaveProgress.Size = new System.Drawing.Size(0, 17);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,13 +241,13 @@
         private System.Windows.Forms.GroupBox grpFriendList;
         private System.Windows.Forms.RadioButton radOnline;
         private System.Windows.Forms.RadioButton radAll;
-        private System.Windows.Forms.ToolStripStatusLabel lblProgress;
+        private System.Windows.Forms.ToolStripStatusLabel lblState;
         private System.ComponentModel.BackgroundWorker bWorkerRead;
         private System.ComponentModel.BackgroundWorker bWorkerHunt;
         private System.Windows.Forms.Button btnReopenChrome;
         private System.Windows.Forms.NumericUpDown numContinueFrom;
         private System.Windows.Forms.NotifyIcon barCaptchaNotify;
-        private System.Windows.Forms.ToolStripStatusLabel lblSaveProgress;
+        private System.Windows.Forms.ToolStripStatusLabel lblProgress;
 
     }
 }
