@@ -23,6 +23,7 @@ namespace TrophyHunterGUI
         static string profileListUrl = "https://www.draugiem.lv/friends/?tab=2";
         static bool processRunning;
         static List<string> friendsList;
+        static int Found = 0;
 
         #region Database
         static string DatabaseFile = "friendDB.db3";
@@ -165,6 +166,7 @@ namespace TrophyHunterGUI
             barProgress.Maximum = friendsList.Count;
 
             lblState.Text = "Hunting...";
+            Found = 0;
             bWorkerHunt.RunWorkerAsync();
         }
 
@@ -471,6 +473,7 @@ namespace TrophyHunterGUI
                 try
                 {
                     element.Click();
+                    Found++;
                 }
                 catch { }
             }
@@ -487,7 +490,7 @@ namespace TrophyHunterGUI
             try
             {
                 barProgress.Value = e.ProgressPercentage;
-                lblProgress.Text = string.Format("{0}/{1}", e.ProgressPercentage, friendsList.Count);
+                lblProgress.Text = string.Format("{0}/{1} (Found: {2})", e.ProgressPercentage, friendsList.Count,Found);
             }
             catch { }
         }
