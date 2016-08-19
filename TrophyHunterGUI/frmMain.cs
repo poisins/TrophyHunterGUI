@@ -387,16 +387,12 @@ namespace TrophyHunterGUI
             if ((e.Cancelled == true))
             {
                 LogMessage("Worker Cancelled!");
-                lblState.Text = "Done!";
-                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
             else if (!(e.Error == null))
             {
                 LogMessage("Worker Error: " + e.Error.Message);
-                lblState.Text = "Error!";
-                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
@@ -405,8 +401,6 @@ namespace TrophyHunterGUI
                 if (bWorkerRead.CancellationPending)
                 {
                     LogMessage("Worker Cancelled!");
-                    lblState.Text = "Done!";
-                    lblProgress.Text = string.Empty;
                     //ChangeProcessState(false);
                     return;
                 }
@@ -501,27 +495,32 @@ namespace TrophyHunterGUI
             if ((e.Cancelled == true))
             {
                 LogMessage("Worker Cancelled!");
+                lblState.Text = "Done!";
+                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
             else if (!(e.Error == null))
             {
                 LogMessage("Worker Error: " + e.Error.Message);
+                lblState.Text = "Error!";
+                lblProgress.Text = string.Empty;
                 //ChangeProcessState(false);
                 return;
             }
             else
             {
-                if (bWorkerHunt.CancellationPending)
-                {
-                    LogMessage("Worker Cancelled!");
-                    //ChangeProcessState(false);
-                    return;
-                }
+                //if (bWorkerHunt.CancellationPending)
+                //{
+                //    LogMessage("Worker Cancelled!");
+                //    lblState.Text = "Done!";
+                //    lblProgress.Text = string.Empty;
+                //    //ChangeProcessState(false);
+                //    return;
+                //}
 
                 numContinueFrom.Value += 1;
                 bWorkerHunt.RunWorkerAsync();
-                return;
             }
         }
         #endregion
